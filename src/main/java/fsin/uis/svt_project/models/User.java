@@ -18,24 +18,30 @@ public class User {
     @Column(name = "lastname", nullable = false)
     private String lastName;
 
-    @Column(name = "departament", nullable = false)
-    private String departament;
-
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "roles_id")})
     Set<Role> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_department", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "department_id")})
+    Set<Department> departments;
 
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String departament, String email, Set<Role> roles) {
+    public User(String firstName, String lastName, Set<Department> departments, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.departament = departament;
+        this.departments = departments;
         this.email = email;
+        this.password = password;
         this.roles = roles;
     }
 
@@ -63,14 +69,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getDepartament() {
-        return departament;
-    }
-
-    public void setDepartament(String departament) {
-        this.departament = departament;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -79,11 +77,27 @@ public class User {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Department> getDepartaments() {
+        return departments;
+    }
+
+    public void setDepartaments(Set<Department> departments) {
+        this.departments = departments;
     }
 }
