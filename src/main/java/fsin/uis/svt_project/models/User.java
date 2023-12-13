@@ -18,6 +18,9 @@ public class User {
     @Column(name = "lastname", nullable = false)
     private String lastName;
 
+    @Column(name = "position")
+    private String position;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -36,9 +39,10 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, Set<Department> departments, String email, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, String position, Set<Department> departments, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.position = position;
         this.departments = departments;
         this.email = email;
         this.password = password;
