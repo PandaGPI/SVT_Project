@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,9 +27,9 @@ public class JwtTokenUtils {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        Set<String> roleSet = userDetails.getAuthorities().stream()
+        List<String> roleSet = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
         claims.put("roles", roleSet);
 
         Date issuedDate = new Date();
@@ -45,8 +46,8 @@ public class JwtTokenUtils {
         return getAllClaimsFromToken(token).getSubject();
     }
 
-    public Set<String> getRoles(String token) {
-        return getAllClaimsFromToken(token).get("roles", Set.class);
+    public List<String> getRoles(String token) {
+        return getAllClaimsFromToken(token).get("roles", List.class);
     }
 
     private Claims getAllClaimsFromToken(String token) {

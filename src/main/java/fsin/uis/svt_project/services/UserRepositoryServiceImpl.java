@@ -21,4 +21,5 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
     public Optional<User> findByFirstName(String firstName) {
         return userRepository.findByFirstName(firstName);
     }
+
 }
