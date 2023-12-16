@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface UserRepositoryService {
 
     Optional<User> findByFirstName(String firstName);
+
+    Optional<User> findByEmail(String email);
 }

@@ -22,4 +22,9 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
         return userRepository.findByFirstName(firstName);
     }
 
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 }

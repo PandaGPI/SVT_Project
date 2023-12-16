@@ -39,12 +39,12 @@ public class AuthService {
 
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getFirstName(), authRequest.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
             return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неверный лоигн или пароль"), HttpStatus.UNAUTHORIZED);
         }
 
-        UserDetails userDetails = userService.loadUserByUsername(authRequest.getFirstName());
+        UserDetails userDetails = userService.loadUserByUsername(authRequest.getEmail());
         String token = jwtTokenUtils.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
@@ -54,11 +54,11 @@ public class AuthService {
         if (!registrationUserDTO.getPassword().equals(registrationUserDTO.getConfirmPassword())) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"), HttpStatus.BAD_REQUEST);
         }
-        if (userRepositoryService.findByFirstName(registrationUserDTO.getFirstName()).isPresent()) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем существует"), HttpStatus.BAD_REQUEST);
+        if (userRepositoryService.findByEmail(registrationUserDTO.getEmail()).isPresent()) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
         }
 
         User user = userService.createUser(registrationUserDTO);
-        return ResponseEntity.ok(new UserDTO(user.getId(), user.getFirstName(), user.getEmail()));
+        return ResponseEntity.ok(new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPosition()));
     }
 }
